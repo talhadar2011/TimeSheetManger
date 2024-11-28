@@ -13,7 +13,6 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as TimeSheetImport } from './routes/TimeSheet'
 import { Route as ProfileImport } from './routes/Profile'
-import { Route as MainImport } from './routes/Main'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
@@ -27,12 +26,6 @@ const TimeSheetRoute = TimeSheetImport.update({
 const ProfileRoute = ProfileImport.update({
   id: '/Profile',
   path: '/Profile',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const MainRoute = MainImport.update({
-  id: '/Main',
-  path: '/Main',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -51,13 +44,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/Main': {
-      id: '/Main'
-      path: '/Main'
-      fullPath: '/Main'
-      preLoaderRoute: typeof MainImport
       parentRoute: typeof rootRoute
     }
     '/Profile': {
@@ -81,14 +67,12 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/Main': typeof MainRoute
   '/Profile': typeof ProfileRoute
   '/TimeSheet': typeof TimeSheetRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/Main': typeof MainRoute
   '/Profile': typeof ProfileRoute
   '/TimeSheet': typeof TimeSheetRoute
 }
@@ -96,30 +80,27 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/Main': typeof MainRoute
   '/Profile': typeof ProfileRoute
   '/TimeSheet': typeof TimeSheetRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/Main' | '/Profile' | '/TimeSheet'
+  fullPaths: '/' | '/Profile' | '/TimeSheet'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/Main' | '/Profile' | '/TimeSheet'
-  id: '__root__' | '/' | '/Main' | '/Profile' | '/TimeSheet'
+  to: '/' | '/Profile' | '/TimeSheet'
+  id: '__root__' | '/' | '/Profile' | '/TimeSheet'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  MainRoute: typeof MainRoute
   ProfileRoute: typeof ProfileRoute
   TimeSheetRoute: typeof TimeSheetRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  MainRoute: MainRoute,
   ProfileRoute: ProfileRoute,
   TimeSheetRoute: TimeSheetRoute,
 }
@@ -135,16 +116,12 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/Main",
         "/Profile",
         "/TimeSheet"
       ]
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/Main": {
-      "filePath": "Main.tsx"
     },
     "/Profile": {
       "filePath": "Profile.tsx"
