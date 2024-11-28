@@ -10,15 +10,16 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <React.Fragment>
-      <div className='HeaderLayout'>
-        <Header /> {/* Common Header */}
-        <div className='SidebarLayout'>
-          <Sidebar /> {/* Common Sidebar */}
-          <div className='MainLayout' >
-            <Outlet /> {/* Render child routes here */}
-          </div>
-        </div>
-      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+  <Header /> {/* Common Header */}
+  <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+    <Sidebar /> {/* Common Sidebar */}
+    <main style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
+      <Outlet /> {/* Render child routes here */}
+    </main>
+  </div>
+</div>
+
     </React.Fragment>
   )
 }
