@@ -1,6 +1,7 @@
 import "../CSS/Sidebar.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHouse,faUser,faBusinessTime } from '@fortawesome/free-solid-svg-icons';
+import { Link } from "@tanstack/react-router";
 
 export default function Sidebar() {
     return (
@@ -8,7 +9,9 @@ export default function Sidebar() {
             <div className="Sidebar_item">
                 <div className="Sidebar_icon">
                     <h3>
-                    <FontAwesomeIcon icon={faHouse} />
+                        <Link to={"/"}>
+                            <FontAwesomeIcon icon={faHouse} />
+                        </Link>
                     </h3>
                     
                 </div>
@@ -18,7 +21,9 @@ export default function Sidebar() {
 
                     </h3>
                     <ul>
-                        <li>Profile</li>
+                        <Link to={"/profile"}>    
+                            <li>Profile</li>
+                        </Link>
                     </ul>
                 </div>
                 <div className="Sidebar_icon">
@@ -27,7 +32,9 @@ export default function Sidebar() {
 
                     </h3>
                     <ul>
-                        <li>TimeSheets</li>
+                        <Link to={"/TimeSheet"}>
+                            <li>TimeSheets</li>
+                        </Link>
                         <li>Scdular</li>
 
                     </ul>

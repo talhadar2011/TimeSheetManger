@@ -1,0 +1,49 @@
+.TimeSheetFormh1{
+    color: #2C3E50;
+}
+.TimeSheetForm{
+    border-top: 1px solid #2C3E50 ;
+    border-left: 1px solid #2C3E50 ;
+    box-shadow: -2px -2px 10px #2C3E50; /* Shadow on top and left */
+    height: 100%;
+}
+.Form{
+    padding: 10px;
+    position: sticky;
+}
+.TimeSheetButton {
+    color: #2C3E50;
+    background-color: transparent;
+    border-color: #2C3E50;
+    border-radius: 5px;
+    padding: 10px;
+}
+.TimeSheetButton:hover{
+    color: #fff;
+    background-color: #2C3E50;
+    border-color: #fff;
+
+}
+.Collapsing{
+    background-color: #2C3E50;
+    border-radius: 25%;
+    padding: 20px;
+}
+.Collapsing{
+    width: 50px; /* Equal width and height */
+    height: 50px;
+    background-color: #2C3E50; /* Button color */
+    color: white; /* Text color */
+    border: none; /* Remove border */
+    border-radius: 50%; /* Makes the button circular */
+    display: flex; /* Center the text */
+    align-items: center; /* Center the text vertically */
+    justify-content: center; /* Center the text horizontally */
+    font-size: 16px; /* Text size */
+    cursor: pointer; /* Change cursor to pointer */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow */
+  }
+  
+  .Collapsing:hover {
+    background-color: #34495E; /* Darken color on hover */
+  }

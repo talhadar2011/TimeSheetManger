@@ -72,3 +72,10 @@
 .Sidebar_icon ul li:hover {
     background-color: #2C3E50; /* Highlight the list item on hover */
 }
+a{
+  color: white;
+  text-decoration: none;
+}
+a:hover{
+  color: white;
+}

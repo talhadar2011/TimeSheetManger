@@ -1,0 +1,11 @@
+.fc .fc-daygrid-day-number{
+    color: #2c3e50;
+}
+.fc .fc-col-header-cell-cushion{
+    color: #2c3e50;
+
+}
+.Calendar{
+    height: 600px;
+    overflow: scroll;
+}
