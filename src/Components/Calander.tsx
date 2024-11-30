@@ -2,11 +2,13 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from "@fullcalendar/interaction"
 import momentPlugin from '@fullcalendar/moment';
-
+import { StatusContext } from './CalFormShareContext';
 import"../CSS/Calander.css"
+import { useContext } from 'react';
 export default function Calander() {
 
-    
+    const { startDatestate, setstartDatestate, endDatestate, setendDatestate } = useContext(StatusContext);
+
     const handleDateSelect = (selectInfo:any) => {
         const calendarApi = selectInfo.view.calendar;
         // Clear the selection by default
@@ -30,7 +32,9 @@ export default function Calander() {
             year: "numeric",
           }).format(endDate);
         if (startDate >= firstDayOfMonth && endDate <= lastDayOfMonth) {
-          alert(`Selected range: ${formattedstartDate} to ${formattedendDate}`);
+
+          setstartDatestate(formattedstartDate)
+          setendDatestate(formattedendDate)
           // Proceed with your logic here
         } else {
         const toastElement = document.getElementById("toast");

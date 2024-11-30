@@ -1,9 +1,12 @@
 import React from 'react'
 import Calander from './Calander'
 import Form from './Form'
+import { StatusProvider } from "./CalFormShareContext";
+
 export default function TimeSheet() {
     return (
         <div>
+            <StatusProvider>
             <h1>TimeSheet</h1>
             <div className='row'>
                 <div className='col-8'>
@@ -13,6 +16,8 @@ export default function TimeSheet() {
                     <Form/>
                  </div>
             </div>
+            </StatusProvider>
+            
         </div>
     )
 }
