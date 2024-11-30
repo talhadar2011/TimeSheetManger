@@ -2,23 +2,23 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from "@fullcalendar/interaction"
 import momentPlugin from '@fullcalendar/moment';
+
 import"../CSS/Calander.css"
 export default function Calander() {
 
     
     const handleDateSelect = (selectInfo:any) => {
         const calendarApi = selectInfo.view.calendar;
-        console.log(selectInfo)
         // Clear the selection by default
         calendarApi.unselect();
     
         const startDate = new Date(selectInfo.startStr);
         const endDate = new Date(selectInfo.endStr);
-    
+        endDate.setDate(endDate.getDate() - 1);
+
         const now = new Date();
         const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1); 
         const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-        endDate.setDate(endDate.getDate() - 1);
         const formattedstartDate = new Intl.DateTimeFormat("eu", {
             day: "2-digit",
             month: "2-digit",
@@ -33,7 +33,10 @@ export default function Calander() {
           alert(`Selected range: ${formattedstartDate} to ${formattedendDate}`);
           // Proceed with your logic here
         } else {
-          alert("Please select dates within the current month only.");
+        const toastElement = document.getElementById("toast");
+        const toast = new bootstrap.Toast(toastElement); 
+        toast.show();
+          
         }
       };
     return (
@@ -45,10 +48,33 @@ export default function Calander() {
       select={handleDateSelect}
       height="100%"
       weekends={false}
-      
-
-
-    />
+        />
+         {/* Toast Component */}
+         <div
+                id="toast"
+                className="toast align-items-center text-bg-danger border-0"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+                style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px",
+                    zIndex: 1050,
+                }}
+            >
+                <div className="d-flex">
+                    <div className="toast-body">
+                        Please select dates within the current month only.
+                    </div>
+                    <button
+                        type="button"
+                        className="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast"
+                        aria-label="Close"
+                    ></button>
+                </div>
+            </div>
         </div>
     )
 }
