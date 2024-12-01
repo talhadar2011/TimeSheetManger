@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import"../CSS/Form.css"
-import { StatusContext } from "./CalFormShareContext";
+import { useDateContext } from "./CalFormShareContext";
 export default function Form() {
-    const { startDatestate, setstartDatestate, endDatestate, setendDatestate } = useContext(StatusContext);
-console.log(startDatestate,endDatestate,"Share Data")
+    const { dates } = useDateContext();
+
     return (
         <div >
             <h3 className='TimeSheetFormh1'>TimeSheet Form</h3>
@@ -20,12 +20,12 @@ console.log(startDatestate,endDatestate,"Share Data")
                     </div>
                     <div className="mb-3">
                         <label  className="form-label"> StartDate</label>
-                        <input type='text' className='form-control' value={startDatestate} placeholder='Select StartDate from Calander' disabled/>
+                        <input type='text' className='form-control' value={dates.startDate}  placeholder='Select StartDate from Calander' disabled/>
 
                     </div>
                     <div className="mb-3">
                         <label  className="form-label"> EndDate</label>
-                        <input type='text' className='form-control' value={endDatestate} placeholder='Select EndDate from Calander' disabled />
+                        <input type='text' className='form-control'value={dates.endDate}  placeholder='Select EndDate from Calander' disabled />
 
                     </div>
                     <div className="mb-3">
@@ -39,7 +39,7 @@ console.log(startDatestate,endDatestate,"Share Data")
                     </div>
                     <button className='TimeSheetButton'> Submit TimeSheet</button>
                 </div>
-                <button className='Collapsing'>x</button>
+                {/* <button className='Collapsing'>x</button> */}
 
             </div>
         </div>
