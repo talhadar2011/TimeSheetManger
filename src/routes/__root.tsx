@@ -9,25 +9,22 @@ export const Route = createRootRoute({
   component: RootComponent,
 })
 function RootComponent() {
-const [User,setUser]=useState<boolean>(false)
-  if(!User)
-  {
-    return(
-      <SignIn
-      User={User}
-      setUser={setUser}
-      />
-    )
-  }else{
+  // if(!User)
+  // {
+  //   return(
+  //     <SignIn
+  //     />
+  //   )
+  // }else{
     return (
       <React.Fragment>
         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-    <Header /> {/* Common Header */}
+    <Header /> 
     <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-      <Sidebar /> {/* Common Sidebar */}
-      <main style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
-        <Outlet /> {/* Render child routes here */}
-      </main>
+      <Sidebar /> 
+       <main style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
+        <Outlet /> 
+      </main> 
     </div>
   </div>
   
@@ -35,4 +32,4 @@ const [User,setUser]=useState<boolean>(false)
     )
   }
  
-}
+//}

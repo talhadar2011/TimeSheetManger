@@ -8,7 +8,7 @@ import Toastmsg from "./Toastmsg";
 
 export default function Form() {
     const [Project, setProject] = useState<string>("")
-    const [SartTime, setStartTime] = useState<string>("")
+    const [StartTime, setStartTime] = useState<string>("")
     const [EndTime, setEndTime] = useState<string>("")
 
     const TimeSheetIDs=useTimesheetsIDs()
@@ -21,7 +21,6 @@ export default function Form() {
           
     }
     if(TimeSheetIDs.isPending){
-        console.log("Pending")
     }else if(TimeSheetIDs.isSuccess){
         console.log(TimeSheetIDs.data)
         TimeSheetIDs.data.map((id)=>{
@@ -32,7 +31,6 @@ export default function Form() {
     const formDataHandler =(event:any)=>{
         const{name,value}=event.target
         console.log(event.target);
-        
         (name=="Project")?(setProject(value)):
         (name=="StartTime")?(setStartTime(value)):
         (setEndTime(value))
@@ -43,11 +41,35 @@ export default function Form() {
             Project:Project,
             StartDate:dates.startDate,
             EndDate:dates.endDate,
-            StartTime:SartTime,
+            StartTime:StartTime,
             EndTime:EndTime
         }
-        setTimeSheetData.mutate(FormData)
+        
+        const start = new Date(`2024-01-01T${StartTime}`);
+        const end = new Date(`2024-01-01T${EndTime}`);
+      console.log(start,end,"time")
+        // Calculate the difference in milliseconds
+        const diffInMs = end - start;
+      
+        // Convert milliseconds to hours
+        const hours = diffInMs / (1000 * 60 * 60);
+      
+        // Return the number of hours
+        console.log(hours) 
+        
+  
+        if(hours<=8){
+         //setTimeSheetData.mutate(FormData)
+
+        }else{
+            console.log("else")
+            const toastElement = document.getElementById("toastOverTime");
+            const toast = new bootstrap.Toast(toastElement);     
+            toast.show();
+            
+        }
     }
+   
     return (
         <div >
             <Toastmsg/>
