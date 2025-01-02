@@ -4,6 +4,9 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 interface Dates {
   startDate: string;
   endDate: string;
+  project:string;
+  starttime:string;
+  endtime:string
 }
 
 interface DateContextType {
@@ -21,10 +24,10 @@ interface DateProviderProps {
 
 // Create the provider
 export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
-  const [dates, setDates] = useState<Dates>({ startDate: "", endDate: "" });
-
+  const [dates, setDates] = useState<Dates>({ startDate: "", endDate: "",project:"",starttime:"",endtime:"" });
+  const [EventFunction,setEventFunction]=useState<any>(undefined)
   return (
-    <DateContext.Provider value={{ dates, setDates }}>
+    <DateContext.Provider value={{ dates, setDates}}>
       {children}
     </DateContext.Provider>
   );

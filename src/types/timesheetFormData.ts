@@ -3,6 +3,7 @@ export interface TimeSheetFormData{
     StartTime:string,
     EndTime:string,
     StartDate:string,
-    EndDate:string, 
+    EndDate:string,
+    WorkingHours:number 
     id?:number 
 }
