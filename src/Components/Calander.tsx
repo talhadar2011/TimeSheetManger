@@ -7,15 +7,16 @@ import Toastmsg from './Toastmsg';
 import { useDateContext } from "../Context/CalFormShareContext";
 import { useEffect, useState } from 'react';
 import { useFunctionContext } from "../Context/FunctionContxt";
+import { Tooltip } from 'bootstrap';
 
 export default function Calander() {
 
     const { dates, setDates } = useDateContext();
     const [Event,setEvent]=useState([{
-        title:"",
-        date:""
+        
+
     }])
-    console.log(dates,"Data")
+    
     const handleDateSelect = (selectInfo:any) => {
         const calendarApi = selectInfo.view.calendar;
         // Clear the selection by default
@@ -34,18 +35,17 @@ export default function Calander() {
         const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1,0);
         lastDayOfMonth.setHours(23, 59, 59, 999); 
 
-        const formattedstartDate = new Intl.DateTimeFormat("eu", {
+        const formattedstartDate = new Intl.DateTimeFormat("en-CA", {
             day: "2-digit",
             month: "2-digit",
             year: "numeric",
           }).format(startDate);
-          console.log(formattedstartDate,"datesStart")
-        const formattedendDate = new Intl.DateTimeFormat("eu", {
+        const formattedendDate = new Intl.DateTimeFormat("en-CA", {
             day: "2-digit",
             month: "2-digit",
             year: "numeric",
           }).format(endDate);
-          
+          console.log(formattedstartDate,"FormattedDates")
         if (startDate >= firstDayOfMonth && endDate <= lastDayOfMonth) {
 
            setDates({startDate:formattedstartDate,endDate:formattedendDate})
@@ -60,44 +60,69 @@ export default function Calander() {
       const { setDefinedFunction } = useFunctionContext();
 
       useEffect(() => {
-        // Define the function
-        const myFunction = (message: string): void => {
-          console.log("Function defined in Component A:", message);
+        const myFunction = (project:string,startdate:string, enddate:string,starttime:string,endtime:string): void => {
+            
+            // const start = new Date(startdate);
+            // const end = new Date(enddate);
+            // const events = [];
+            // while (start <= end) {
+            //   events.push({
+            //     title: project, 
+            //     date: new Date(start).toISOString().split("T")[0], 
+            //   });
+            //   start.setDate(start.getDate() + 1); 
+            // }
+            const start=startdate+"T"+starttime
+            const end=enddate+"T"+endtime
+            if(startdate===enddate){
+              console.log("IF",startdate,enddate)
+              setEvent([{
+                title:project,
+                date:startdate,
+                color:'#2c3e50',
+                description: project,
+                borderColor:"#34495e"
+              }])
+            }else{
+              setEvent([{
+                title:project,
+                start:start,
+                end:end,
+                color:'#2c3e50',
+                description: project,
+                borderColor:"#34495e"
+              }])
+            }
+              
+      
         };
     
-        // Share the function through context
         setDefinedFunction(() => myFunction);
-      }, [setDefinedFunction]);
-    const eventSetHandler=()=>{
-      if(dates.project!==""){
-      const originalDate = dates.startDate;
-
-      const [day, month, year] = originalDate.split("/");
-      const formattedDate = new Date(`${year}-${month}-${day}`);
-      const convertedDate = formattedDate.toISOString().split("T")[0];
-      console.log(convertedDate,"Converted"); 
-      setEvent([{title:dates.project,date:convertedDate}])
-      }else{
-        console.log("EventHandlerElse condition")
+      }, [setDefinedFunction,Event]);
+    
+      const handleEventHover = (arg) => {
+        // console.log(arg.event.extendedProps.description)
+        // var tooltip = new Tooltip(arg.el, {
+        //   title: arg.event.extendedProps.description,
+        //   placement: 'top',
+        //   trigger: 'hover',
+        //   container: 'body'
+        // });
       }
-
-    }
-    useEffect(() => {
-      // eventSetHandler()
-      // setDates({project:""})
-
-      // console.log(Event,"Event")
-    }, [Event])
     return (
         <div className='Calendar'>
             <FullCalendar
-      plugins={[ dayGridPlugin,interactionPlugin,momentPlugin ]}
-      initialView="dayGridMonth"
-      selectable={true}
-      select={handleDateSelect}
-      height="100%"
-      weekends={false}
-      events={Event}
+              plugins={[ dayGridPlugin,interactionPlugin,momentPlugin ]}
+              initialView="dayGridMonth"
+              selectable={true}
+              select={handleDateSelect}
+              height="100%"
+              weekends={false}
+              nextDayThreshold= '09:00:00'
+              events={Event}
+              eventMouseEnter={handleEventHover}
+
+
         />
          {/* Toast Component */}
          <Toastmsg/>

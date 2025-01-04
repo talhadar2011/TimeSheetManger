@@ -43,17 +43,12 @@ export default function Form() {
         
         const start = new Date(`2024-01-01T${StartTime}`);
         const end = new Date(`2024-01-01T${EndTime}`);
-        // Calculate the difference in milliseconds
         const diffInMs = end - start;
       
-        // Convert milliseconds to hours
         const hours = diffInMs / (1000 * 60 * 60);
       
-        // Return the number of hours
         
-         console.log(hours)
         if(hours<=8&&hours>0){
-            console.log(dates.endDate,dates.startDate,"Date")
             const FormData:TimeSheetFormData={
                 Project:Project,
                 StartDate:dates.startDate,
@@ -62,17 +57,19 @@ export default function Form() {
                 EndTime:EndTime,
                 WorkingHours:hours
             }
-            console.log(FormData,"Data")
-         setTimeSheetData.mutate(FormData)
-         //setDates({startDate:dates.startDate,endDate:dates.endDate,project:Project,starttime:StartTime,endtime:EndTime})
-
+        // setTimeSheetData.mutate(FormData)
+         
+            if (definedFunction) {
+              definedFunction(Project,dates.startDate,dates.endDate,StartTime,EndTime);
+            } else {
+              console.log("Function not yet defined in Component D.");
+            }
         }else{
             const toastElement = document.getElementById("toastOverTime");
             const toast = new bootstrap.Toast(toastElement);     
             toast.show();
         }
          
-        // setDates({startDate:"",endDate:"",project:"",starttime:"",endtime:""})
     }
     const { definedFunction } = useFunctionContext();
 
@@ -110,13 +107,7 @@ export default function Form() {
                         <label  className="form-label"> EndTime</label>
                        <input onChange={formDataHandler} name="EndTime" value={EndTime} type='time' className='form-control'></input>
                     </div>
-                    <button onClick={() => {
-        if (definedFunction) {
-          definedFunction("Hello from Component Form");
-        } else {
-          console.log("Function not yet defined in Component A.");
-        }
-      }} className='TimeSheetButton'> Submit TimeSheet</button>
+                    <button onClick={formSubmitHandler} className='TimeSheetButton'> Submit TimeSheet</button>
                 </div>
                 {/* <button className='Collapsing'>x</button> */}
 
