@@ -53,6 +53,31 @@ export default function Toastmsg() {
                 </div>
             </div>
             <div
+                id="toastOverProject"
+                className="toast align-items-center text-bg-danger border-0"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+                style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px",
+                    zIndex: 1050,
+                }}
+            >
+                <div className="d-flex">
+                    <div className="toast-body">
+                        You have not Selected the Project kindly Select the Project
+                    </div>
+                    <button
+                        type="button"
+                        className="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast"
+                        aria-label="Close"
+                    ></button>
+                </div>
+            </div>
+            <div
                 id="toastSucess"
                 className="toast align-items-center text-bg-success border-0"
                 role="alert"

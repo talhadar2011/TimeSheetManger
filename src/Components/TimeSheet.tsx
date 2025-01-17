@@ -2,6 +2,7 @@ import Calander from './Calander'
 import Form from './Form'
 import { DateProvider } from "../Context/CalFormShareContext";
 import { FunctionProvider } from '../Context/FunctionContxt';
+import DayDetailMenu from './DayDetailMenu';
 export default function TimeSheet() {
     return (
         <div>

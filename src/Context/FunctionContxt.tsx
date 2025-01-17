@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 // Define the type for the shared function
-type SharedFunction = ((project:string,startdate:string,enddate:string,starttime:string,endtime:string) => void) | null;
+type SharedFunction = ((project:string,startdate:string,enddate:string,
+  starttime:string,endtime:string,WorkingHours:number) => void) | null;
 
 // Define the context value type
 interface FunctionContextType {

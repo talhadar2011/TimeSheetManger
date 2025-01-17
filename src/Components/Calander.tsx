@@ -12,10 +12,7 @@ import { Tooltip } from 'bootstrap';
 export default function Calander() {
 
     const { dates, setDates } = useDateContext();
-    const [Event,setEvent]=useState([{
-        
-
-    }])
+    const [Event,setEvent]=useState([{}])
     
     const handleDateSelect = (selectInfo:any) => {
         const calendarApi = selectInfo.view.calendar;
@@ -60,7 +57,7 @@ export default function Calander() {
       const { setDefinedFunction } = useFunctionContext();
 
       useEffect(() => {
-        const myFunction = (project:string,startdate:string, enddate:string,starttime:string,endtime:string): void => {
+        const myFunction = (project:string,startdate:string, enddate:string,starttime:string,endtime:string,hours:number): void => {
             
             // const start = new Date(startdate);
             // const end = new Date(enddate);
@@ -75,22 +72,21 @@ export default function Calander() {
             const start=startdate+"T"+starttime
             const end=enddate+"T"+endtime
             if(startdate===enddate){
-              console.log("IF",startdate,enddate)
-              setEvent([{
+              setEvent([...Event,{
                 title:project,
                 date:startdate,
-                color:'#2c3e50',
                 description: project,
-                borderColor:"#34495e"
+                hours:hours
               }])
-            }else{
-              setEvent([{
+            }else
+            {
+              setEvent([...Event,{
                 title:project,
                 start:start,
                 end:end,
-                color:'#2c3e50',
                 description: project,
-                borderColor:"#34495e"
+                hours:hours
+                
               }])
             }
               
@@ -100,7 +96,7 @@ export default function Calander() {
         setDefinedFunction(() => myFunction);
       }, [setDefinedFunction,Event]);
     
-      const handleEventHover = (arg) => {
+      const handleEventClick = (arg) => {
         // console.log(arg.event.extendedProps.description)
         // var tooltip = new Tooltip(arg.el, {
         //   title: arg.event.extendedProps.description,
@@ -108,6 +104,8 @@ export default function Calander() {
         //   trigger: 'hover',
         //   container: 'body'
         // });
+        
+        console.log("Clicked",dates,arg)
       }
     return (
         <div className='Calendar'>
@@ -120,9 +118,10 @@ export default function Calander() {
               weekends={false}
               nextDayThreshold= '09:00:00'
               events={Event}
-              eventMouseEnter={handleEventHover}
-
-
+              eventClick={handleEventClick}
+              eventColor='#2c3e50'
+              eventBorderColor="#34495e"
+              eventTextColor='white'
         />
          {/* Toast Component */}
          <Toastmsg/>

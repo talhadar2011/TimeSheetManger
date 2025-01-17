@@ -14,6 +14,8 @@ export default function Form() {
     const [Project, setProject] = useState<string>("")
     const [StartTime, setStartTime] = useState<string>("")
     const [EndTime, setEndTime] = useState<string>("")
+    const [onDateClick, setonDateClick] = useState<boolean>(false)
+
     const TimeSheetIDs=useTimesheetsIDs()
     const setTimeSheetData=useSetTimeSheet()
 
@@ -23,13 +25,13 @@ export default function Form() {
         toast.show();
           
     }
-    if(TimeSheetIDs.isPending){
-    }else if(TimeSheetIDs.isSuccess){
-        // console.log(TimeSheetIDs.data)
-        TimeSheetIDs.data.map((id)=>{
-            // console.log("ID Fatched")
-        })
-    }
+    // if(TimeSheetIDs.isPending){
+    // }else if(TimeSheetIDs.isSuccess){
+    //     // console.log(TimeSheetIDs.data)
+    //     TimeSheetIDs.data.map((id)=>{
+    //         // console.log("ID Fatched")
+    //     })
+    // }
     const formDataHandler =(event:any)=>{
         const{name,value}=event.target
          console.log(event.target);
@@ -48,7 +50,7 @@ export default function Form() {
         const hours = diffInMs / (1000 * 60 * 60);
       
         
-        if(hours<=8&&hours>0){
+        if(hours<=8&&hours>0 && Project!=""){
             const FormData:TimeSheetFormData={
                 Project:Project,
                 StartDate:dates.startDate,
@@ -60,11 +62,22 @@ export default function Form() {
         // setTimeSheetData.mutate(FormData)
          
             if (definedFunction) {
-              definedFunction(Project,dates.startDate,dates.endDate,StartTime,EndTime);
+              definedFunction(Project,dates.startDate,dates.endDate,StartTime,EndTime,hours);
             } else {
               console.log("Function not yet defined in Component D.");
             }
-        }else{
+            setProject("")
+            setStartTime("")
+            setEndTime("")
+            setDates({startDate:"",endDate:"",hours:0,endtime:"",project:"",starttime:""})
+            console.log(dates)
+        }else if(Project===""){
+            const toastElement = document.getElementById("toastOverProject");
+            const toast = new bootstrap.Toast(toastElement);     
+            toast.show();   
+        }
+        
+        else{
             const toastElement = document.getElementById("toastOverTime");
             const toast = new bootstrap.Toast(toastElement);     
             toast.show();
@@ -76,12 +89,18 @@ export default function Form() {
     return (
         <div >
             <Toastmsg/>
-            <h3 className='TimeSheetFormh1'>TimeSheet Form</h3>
+            {
+                (onDateClick)?(
+                    <h3 className='TimeSheetFormh1'>TimeSheet Form</h3>
+
+                ):(
+                    <>
+                    <h3 className='TimeSheetFormh1'>TimeSheet Form</h3>
             <div className='TimeSheetForm'>
                 <div className='Form'>
                     <div className="mb-3">
                         <label  className="form-label"> Project</label>
-                        <select onChange={formDataHandler} name="Project" value={Project} className="form-select" aria-label="Default select example">
+                        <select onChange={formDataHandler} name="Project" value={Project} required className="form-select" aria-label="Default select example">
                             <option selected>Open this select </option>
                             <option value="FrontEnd">FrontEnd</option>
                             <option value="BackEnd">BackEnd</option>
@@ -112,6 +131,11 @@ export default function Form() {
                 {/* <button className='Collapsing'>x</button> */}
 
             </div>
+            </> 
+                )
+            }
+            
+
         </div>
     )
 }

@@ -12,3 +12,6 @@
 .Calendar{
     height: 597px;
 }
+.fc-event-main{
+    cursor: pointer;
+}
