@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import"../CSS/Form.css"
 import { useDateContext } from "../Context/CalFormShareContext";
 import { TimeSheetFormData } from "../types/timesheetFormData";
-import { useTimeSheetData, useTimesheetsIDs } from "../API/TSMQuery";
+import { useTimeSheetData} from "../API/TSMQuery";
 import { useSetTimeSheet } from "../API/TSMMutations";
 import Toastmsg from "./Toastmsg";
 import { useFunctionContext } from "../Context/FunctionContxt";
@@ -16,15 +16,16 @@ export default function Form() {
     const [EndTime, setEndTime] = useState<string>("")
     const [onDateClick, setonDateClick] = useState<boolean>(false)
 
-    const TimeSheetIDs=useTimesheetsIDs()
     const setTimeSheetData=useSetTimeSheet()
-    const TimeSheetData=useTimeSheetData()
-    if(setTimeSheetData.isSuccess){
+   
+    useEffect(() => {
+        if(setTimeSheetData.isSuccess){
         const toastElement = document.getElementById("toastSucess");
         const toast = new bootstrap.Toast(toastElement); 
         toast.show();
-        TimeSheetData
-    }
+        }
+        console.log(setTimeSheetData,"data")
+    }, [setTimeSheetData.isSuccess])
     // if(TimeSheetIDs.isPending){
     // }else if(TimeSheetIDs.isSuccess){
     //     // console.log(TimeSheetIDs.data)
@@ -61,11 +62,11 @@ export default function Form() {
             }
             setTimeSheetData.mutate(FormData)
          
-            if (definedFunction) {
-              definedFunction(Project,dates.startDate,dates.endDate,StartTime,EndTime,hours);
-            } else {
-              console.log("Function not yet defined in Component D.");
-            }
+            // if (definedFunction) {
+            //   definedFunction(Project,dates.startDate,dates.endDate,StartTime,EndTime,hours);
+            // } else {
+            //   console.log("Function not yet defined in Component D.");
+            // }
             setProject("")
             setStartTime("")
             setEndTime("")
@@ -84,7 +85,7 @@ export default function Form() {
         }
          
     }
-    const { definedFunction } = useFunctionContext();
+   // const { definedFunction } = useFunctionContext();
 
     return (
         <div >

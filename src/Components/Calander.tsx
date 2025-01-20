@@ -15,8 +15,8 @@ export default function Calander() {
     const { dates, setDates } = useDateContext();
     const [Event,setEvent]=useState([{}])
 
-    //Already Created Events/Entries from Db
-      const TimeSheetData=useTimeSheetData()
+    //Events/Entries from Db
+    const TimeSheetData=useTimeSheetData()
     
      function FetchTimeSheetEvent(){
       if (TimeSheetData.isSuccess && TimeSheetData.data) {
@@ -84,7 +84,7 @@ export default function Calander() {
           
         }
       }
-      const { setDefinedFunction } = useFunctionContext();
+      //const { setDefinedFunction } = useFunctionContext();
       
       //new Event/Entries
       // useEffect(() => {
