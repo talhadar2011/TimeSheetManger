@@ -17,6 +17,10 @@ export const setUserAuth= async(data:UserAuth)=>{
 export const getALLtimesheetsIds=async ()=>{
     return (await axiosInstance.get<TimeSheetFormData[]>('api/TimeSheetEntry')).data.map((timesheet)=>timesheet.Project)
 }
+//GET ALL TIMESHEETS
+export const getALLtimesheets=async ()=>{
+    return (await axiosInstance.get<TimeSheetFormData[]>('api/TimeSheetEntry')).data.map((timesheet)=>timesheet)
+}
 //GET TIMESHEET DATA FROM FORM
 export const setTimeSheet= async(data:TimeSheetFormData)=>{
     await axiosInstance.post("/api/TimeSheetEntry",data)

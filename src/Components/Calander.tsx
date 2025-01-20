@@ -8,12 +8,38 @@ import { useDateContext } from "../Context/CalFormShareContext";
 import { useEffect, useState } from 'react';
 import { useFunctionContext } from "../Context/FunctionContxt";
 import { Tooltip } from 'bootstrap';
+import { useTimeSheetData } from '../API/TSMQuery';
 
 export default function Calander() {
 
     const { dates, setDates } = useDateContext();
     const [Event,setEvent]=useState([{}])
+    //Already Created Events/Entries from Db
+      const TimeSheetData=useTimeSheetData()
     
+    
+    useEffect(() => {
+      if (TimeSheetData.isSuccess && TimeSheetData.data) {
+        const mappedEvents = TimeSheetData.data.map((data) => {
+          if (data.StartDate === data.EndDate) {
+            return {
+              date: data.StartDate ,
+              hours: data.WorkingHours,
+              title: data.Project,
+            };
+          } else {
+            return {
+              start: data.StartDate + 'T' + data.StartTime,
+              end: data.EndDate + 'T' + data.EndTime,
+              hours: data.WorkingHours,
+              title: data.Project,
+            };
+          }
+        });
+        console.log(mappedEvents,"Events")
+         setEvent(mappedEvents);
+      }
+    }, [TimeSheetData.isSuccess, TimeSheetData.data]);
     const handleDateSelect = (selectInfo:any) => {
         const calendarApi = selectInfo.view.calendar;
         // Clear the selection by default
@@ -55,7 +81,8 @@ export default function Calander() {
         }
       }
       const { setDefinedFunction } = useFunctionContext();
-
+      
+      //new Event/Entries
       useEffect(() => {
         const myFunction = (project:string,startdate:string, enddate:string,starttime:string,endtime:string,hours:number): void => {
             
@@ -92,10 +119,10 @@ export default function Calander() {
               
       
         };
-    
+        console.log(Event,"Events")
         setDefinedFunction(() => myFunction);
       }, [setDefinedFunction,Event]);
-    
+      
       const handleEventClick = (arg) => {
         // console.log(arg.event.extendedProps.description)
         // var tooltip = new Tooltip(arg.el, {

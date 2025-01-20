@@ -59,7 +59,7 @@ export default function Form() {
                 EndTime:EndTime,
                 WorkingHours:hours
             }
-        // setTimeSheetData.mutate(FormData)
+            setTimeSheetData.mutate(FormData)
          
             if (definedFunction) {
               definedFunction(Project,dates.startDate,dates.endDate,StartTime,EndTime,hours);
