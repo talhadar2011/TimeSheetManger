@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { TimeSheetFormData } from "../types/timesheetFormData";
 import { setTimeSheet } from "./APIPoints";
 import { UserAuth } from "../types/User";
@@ -10,7 +10,12 @@ export function useSetUser(){
     })
 }
 export function useSetTimeSheet(){
+    const queryClient=useQueryClient();
     return useMutation({
         mutationFn:(data:TimeSheetFormData)=>setTimeSheet(data),
+        onSuccess: () => {
+            // Invalidate the query to refetch the data
+            queryClient.invalidateQueries(['TimeSheetData']);
+          },
     })
 }

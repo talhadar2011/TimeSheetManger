@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import"../CSS/Form.css"
 import { useDateContext } from "../Context/CalFormShareContext";
 import { TimeSheetFormData } from "../types/timesheetFormData";
-import { useTimesheetsIDs } from "../API/TSMQuery";
+import { useTimeSheetData, useTimesheetsIDs } from "../API/TSMQuery";
 import { useSetTimeSheet } from "../API/TSMMutations";
 import Toastmsg from "./Toastmsg";
 import { useFunctionContext } from "../Context/FunctionContxt";
@@ -18,12 +18,12 @@ export default function Form() {
 
     const TimeSheetIDs=useTimesheetsIDs()
     const setTimeSheetData=useSetTimeSheet()
-
+    const TimeSheetData=useTimeSheetData()
     if(setTimeSheetData.isSuccess){
         const toastElement = document.getElementById("toastSucess");
         const toast = new bootstrap.Toast(toastElement); 
         toast.show();
-          
+        TimeSheetData
     }
     // if(TimeSheetIDs.isPending){
     // }else if(TimeSheetIDs.isSuccess){

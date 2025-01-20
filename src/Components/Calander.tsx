@@ -14,11 +14,11 @@ export default function Calander() {
 
     const { dates, setDates } = useDateContext();
     const [Event,setEvent]=useState([{}])
+
     //Already Created Events/Entries from Db
       const TimeSheetData=useTimeSheetData()
     
-    
-    useEffect(() => {
+     function FetchTimeSheetEvent(){
       if (TimeSheetData.isSuccess && TimeSheetData.data) {
         const mappedEvents = TimeSheetData.data.map((data) => {
           if (data.StartDate === data.EndDate) {
@@ -39,6 +39,10 @@ export default function Calander() {
         console.log(mappedEvents,"Events")
          setEvent(mappedEvents);
       }
+     }
+     
+    useEffect(() => {
+      FetchTimeSheetEvent()
     }, [TimeSheetData.isSuccess, TimeSheetData.data]);
     const handleDateSelect = (selectInfo:any) => {
         const calendarApi = selectInfo.view.calendar;
@@ -83,45 +87,45 @@ export default function Calander() {
       const { setDefinedFunction } = useFunctionContext();
       
       //new Event/Entries
-      useEffect(() => {
-        const myFunction = (project:string,startdate:string, enddate:string,starttime:string,endtime:string,hours:number): void => {
+      // useEffect(() => {
+      //   const myFunction = (project:string,startdate:string, enddate:string,starttime:string,endtime:string,hours:number): void => {
             
-            // const start = new Date(startdate);
-            // const end = new Date(enddate);
-            // const events = [];
-            // while (start <= end) {
-            //   events.push({
-            //     title: project, 
-            //     date: new Date(start).toISOString().split("T")[0], 
-            //   });
-            //   start.setDate(start.getDate() + 1); 
-            // }
-            const start=startdate+"T"+starttime
-            const end=enddate+"T"+endtime
-            if(startdate===enddate){
-              setEvent([...Event,{
-                title:project,
-                date:startdate,
-                description: project,
-                hours:hours
-              }])
-            }else
-            {
-              setEvent([...Event,{
-                title:project,
-                start:start,
-                end:end,
-                description: project,
-                hours:hours
+      //       // const start = new Date(startdate);
+      //       // const end = new Date(enddate);
+      //       // const events = [];
+      //       // while (start <= end) {
+      //       //   events.push({
+      //       //     title: project, 
+      //       //     date: new Date(start).toISOString().split("T")[0], 
+      //       //   });
+      //       //   start.setDate(start.getDate() + 1); 
+      //       // }
+      //       const start=startdate+"T"+starttime
+      //       const end=enddate+"T"+endtime
+      //       if(startdate===enddate){
+      //         setEvent([...Event,{
+      //           title:project,
+      //           date:startdate,
+      //           description: project,
+      //           hours:hours
+      //         }])
+      //       }else
+      //       {
+      //         setEvent([...Event,{
+      //           title:project,
+      //           start:start,
+      //           end:end,
+      //           description: project,
+      //           hours:hours
                 
-              }])
-            }
+      //         }])
+      //       }
               
       
-        };
-        console.log(Event,"Events")
-        setDefinedFunction(() => myFunction);
-      }, [setDefinedFunction,Event]);
+      //   };
+      //   console.log(Event,"Events")
+      //   setDefinedFunction(() => myFunction);
+      // }, [setDefinedFunction,Event]);
       
       const handleEventClick = (arg) => {
         // console.log(arg.event.extendedProps.description)
