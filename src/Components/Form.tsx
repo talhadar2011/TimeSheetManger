@@ -10,7 +10,6 @@ import { useFunctionContext } from "../Context/FunctionContxt";
 export default function Form() {
     
     const { dates,setDates } = useDateContext();
-    // console.log(dates,"Datessss")
     const [Project, setProject] = useState<string>("")
     const [StartTime, setStartTime] = useState<string>("")
     const [EndTime, setEndTime] = useState<string>("")
@@ -24,15 +23,38 @@ export default function Form() {
         const toast = new bootstrap.Toast(toastElement); 
         toast.show();
         }
-        console.log(setTimeSheetData,"data")
     }, [setTimeSheetData.isSuccess])
-    // if(TimeSheetIDs.isPending){
-    // }else if(TimeSheetIDs.isSuccess){
-    //     // console.log(TimeSheetIDs.data)
-    //     TimeSheetIDs.data.map((id)=>{
-    //         // console.log("ID Fatched")
-    //     })
-    // }
+   
+    const [Event,setEvent]=useState([{}])
+
+    //Events/Entries from Db
+    const TimeSheetData=useTimeSheetData()
+    
+     function FetchTimeSheetEvent(){
+      if (TimeSheetData.isSuccess && TimeSheetData.data) {
+        const mappedEvents = TimeSheetData.data.map((data) => {
+          if (data.StartDate === data.EndDate) {
+            return {
+              date: data.StartDate ,
+              hours: data.WorkingHours,
+              title: data.Project,
+            };
+          } else {
+            return {
+              start: data.StartDate + 'T' + data.StartTime,
+              end: data.EndDate + 'T' + data.EndTime,
+              hours: data.WorkingHours,
+              title: data.Project,
+            };
+          }
+        });
+         setEvent(mappedEvents);
+      }
+     }
+     
+    useEffect(() => {
+      FetchTimeSheetEvent()
+    }, [TimeSheetData.isSuccess, TimeSheetData.data]);
     const formDataHandler =(event:any)=>{
         const{name,value}=event.target
          console.log(event.target);
@@ -49,43 +71,76 @@ export default function Form() {
         const diffInMs = end - start;
       
         const hours = diffInMs / (1000 * 60 * 60);
-      
-        
-        if(hours<=8&&hours>0 && Project!=""){
-            const FormData:TimeSheetFormData={
-                Project:Project,
-                StartDate:dates.startDate,
-                EndDate:dates.endDate,
-                StartTime:StartTime,
-                EndTime:EndTime,
-                WorkingHours:hours
+        console.log("BookingDate and time",dates.startDate,dates.endDate,dates.project,dates.hours,hours)
+        console.log("Existing Entries",Event)
+        let AlreadBookedDates=[{}]
+        Event.map((date) => {
+            AlreadBookedDates = [{ start: date.start.split('T')[0],end:date.end.split('T')[0],
+                hours:date.hours,title:date.title },...AlreadBookedDates];
+        });
+        console.log(AlreadBookedDates)
+        console.log(dates.startDate,"startdate from dates")
+        let BookingDateExist = AlreadBookedDates.some((d: any) => {
+            if (!d.start || !d.end) return false; // Skip empty objects
+            return (
+                dates.startDate === d.start || 
+                dates.startDate === d.end || 
+                dates.endDate === d.start || 
+                dates.endDate === d.end || 
+                (dates.startDate > d.start && dates.startDate < d.end
+                ) // Between start and end
+            );
+        });
+        if(BookingDateExist){
+            let BookingDateHours=AlreadBookedDates.filter((d:any)=>{
+                if(dates.startDate === d.start || 
+                    dates.startDate === d.end || 
+                    dates.endDate === d.start || 
+                    dates.endDate === d.end || 
+                    (dates.startDate > d.start && dates.startDate < d.end
+                    ) )
+                {
+                    return d
+                }
+    
+            })
+            if(BookingDateHours[0].hours+hours>8){
+                const toastElement = document.getElementById("toastOverLappingDates");
+                const toast = new bootstrap.Toast(toastElement);     
+                toast.show();
             }
-            setTimeSheetData.mutate(FormData)
-         
-            // if (definedFunction) {
-            //   definedFunction(Project,dates.startDate,dates.endDate,StartTime,EndTime,hours);
-            // } else {
-            //   console.log("Function not yet defined in Component D.");
-            // }
-            setProject("")
-            setStartTime("")
-            setEndTime("")
-            setDates({startDate:"",endDate:"",hours:0,endtime:"",project:"",starttime:""})
-            console.log(dates)
-        }else if(Project===""){
-            const toastElement = document.getElementById("toastOverProject");
-            const toast = new bootstrap.Toast(toastElement);     
-            toast.show();   
+            console.log("DateExist",BookingDateExist);
+            console.log("Finding remaining hours",BookingDateHours);
         }
         
-        else{
-            const toastElement = document.getElementById("toastOverTime");
-            const toast = new bootstrap.Toast(toastElement);     
-            toast.show();
-        }
+
+        // if(hours<=8&&hours>0 && Project!=""){
+        //     const FormData:TimeSheetFormData={
+        //         Project:Project,
+        //         StartDate:dates.startDate,
+        //         EndDate:dates.endDate,
+        //         StartTime:StartTime,
+        //         EndTime:EndTime,
+        //         WorkingHours:hours
+        //     }
+        //     setTimeSheetData.mutate(FormData)
+         
+            
+        //     setProject("")
+        //     setStartTime("")
+        //     setEndTime("")
+        //     setDates({startDate:"",endDate:"",hours:0,endtime:"",project:"",starttime:""})
+        // }else if(Project===""){
+        //     const toastElement = document.getElementById("toastOverProject");
+        //     const toast = new bootstrap.Toast(toastElement);     
+        //     toast.show();   
+        // }else{
+        //     const toastElement = document.getElementById("toastOverTime");
+        //     const toast = new bootstrap.Toast(toastElement);     
+        //     toast.show();
+        // }
          
     }
-   // const { definedFunction } = useFunctionContext();
 
     return (
         <div >

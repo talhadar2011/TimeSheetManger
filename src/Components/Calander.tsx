@@ -25,18 +25,17 @@ export default function Calander() {
             return {
               date: data.StartDate ,
               hours: data.WorkingHours,
-              title: data.Project,
+              title: data.Project+" Booked hours: "+data.WorkingHours,
             };
           } else {
             return {
               start: data.StartDate + 'T' + data.StartTime,
               end: data.EndDate + 'T' + data.EndTime,
               hours: data.WorkingHours,
-              title: data.Project,
+              title: data.Project+" Booked hours: "+data.WorkingHours,
             };
           }
         });
-        console.log(mappedEvents,"Events")
          setEvent(mappedEvents);
       }
      }
@@ -44,6 +43,7 @@ export default function Calander() {
     useEffect(() => {
       FetchTimeSheetEvent()
     }, [TimeSheetData.isSuccess, TimeSheetData.data]);
+    //Selected Dates from Calander
     const handleDateSelect = (selectInfo:any) => {
         const calendarApi = selectInfo.view.calendar;
         // Clear the selection by default
@@ -72,11 +72,9 @@ export default function Calander() {
             month: "2-digit",
             year: "numeric",
           }).format(endDate);
-          console.log(formattedstartDate,"FormattedDates")
         if (startDate >= firstDayOfMonth && endDate <= lastDayOfMonth) {
 
            setDates({startDate:formattedstartDate,endDate:formattedendDate})
-          // Proceed with your logic here
         } else {
         const toastElement = document.getElementById("toast");
         const toast = new bootstrap.Toast(toastElement); 
