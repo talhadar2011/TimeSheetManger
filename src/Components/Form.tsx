@@ -74,8 +74,14 @@ export default function Form() {
        //Getting all the booked dates and spliting the dates.
         let AlreadBookedDates=[{}]
         Event.map((date) => {
-            AlreadBookedDates = [{ start: date.start.split('T')[0],end:date.end.split('T')[0],
-                hours:date.hours,title:date.title },...AlreadBookedDates];
+            if(date.start){
+                AlreadBookedDates = [{ start: date.start.split('T')[0],end:date.end.split('T')[0],
+                    hours:date.hours,title:date.title },...AlreadBookedDates];
+            }else{
+                AlreadBookedDates = [{ start: date.date.split('T')[0],
+                    hours:date.hours,title:date.title },...AlreadBookedDates];
+            }
+            
         });
        //Checking if the any of the selected date is already booked
         let BookingDateExist = AlreadBookedDates.some((d: any) => {
