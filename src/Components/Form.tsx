@@ -71,74 +71,108 @@ export default function Form() {
         const diffInMs = end - start;
       
         const hours = diffInMs / (1000 * 60 * 60);
-        console.log("BookingDate and time",dates.startDate,dates.endDate,dates.project,dates.hours,hours)
-        console.log("Existing Entries",Event)
+       //Getting all the booked dates and spliting the dates.
         let AlreadBookedDates=[{}]
         Event.map((date) => {
             AlreadBookedDates = [{ start: date.start.split('T')[0],end:date.end.split('T')[0],
                 hours:date.hours,title:date.title },...AlreadBookedDates];
         });
-        console.log(AlreadBookedDates)
-        console.log(dates.startDate,"startdate from dates")
+       //Checking if the any of the selected date is already booked
         let BookingDateExist = AlreadBookedDates.some((d: any) => {
-            if (!d.start || !d.end) return false; // Skip empty objects
+            if (!d.start || !d.end) return false; 
+           
             return (
-                dates.startDate === d.start || 
-                dates.startDate === d.end || 
-                dates.endDate === d.start || 
-                dates.endDate === d.end || 
-                (dates.startDate > d.start && dates.startDate < d.end
-                ) // Between start and end
+                (dates.startDate >= d.start && dates.startDate < d.end) || // New booking starts within existing
+                (dates.endDate > d.start && dates.endDate <= d.end) ||   // New booking ends within existing
+                (d.start >= dates.startDate && d.end <= dates.endDate) || // Existing booking is within the new booking
+                (dates.startDate <= d.start && dates.endDate >= d.end) // New booking contains existing booking
             );
         });
+        //if the already booked date found.
         if(BookingDateExist){
+            //getting the hours from the matched date object.
             let BookingDateHours=AlreadBookedDates.filter((d:any)=>{
-                if(dates.startDate === d.start || 
-                    dates.startDate === d.end || 
-                    dates.endDate === d.start || 
-                    dates.endDate === d.end || 
-                    (dates.startDate > d.start && dates.startDate < d.end
-                    ) )
+                if(  (dates.startDate >= d.start && dates.startDate < d.end) || // New booking starts within existing
+                (dates.endDate > d.start && dates.endDate <= d.end) ||   // New booking ends within existing
+                (d.start >= dates.startDate && d.end <= dates.endDate) || // Existing booking is within the new booking
+                (dates.startDate <= d.start && dates.endDate >= d.end))
                 {
                     return d
                 }
     
             })
-            if(BookingDateHours[0].hours+hours>8){
+            let TotalhourBooked=0
+            BookingDateHours.map((bdh)=>{
+                TotalhourBooked+=bdh.hours
+            })  
+           
+            if(TotalhourBooked+hours>8){
                 const toastElement = document.getElementById("toastOverLappingDates");
                 const toast = new bootstrap.Toast(toastElement);     
                 toast.show();
+            }else 
+            if(TotalhourBooked>=8){
+                const toastElement = document.getElementById("toastTotalBookabletimeCompleted");
+                const toast = new bootstrap.Toast(toastElement);     
+                toast.show();
+            }else{
+                if(hours<=8&&hours>0 && Project!=""){
+                    const FormData:TimeSheetFormData={
+                        Project:Project,
+                        StartDate:dates.startDate,
+                        EndDate:dates.endDate,
+                        StartTime:StartTime,
+                        EndTime:EndTime,
+                        WorkingHours:hours
+                    }
+                    setTimeSheetData.mutate(FormData)
+                 
+                    
+                    setProject("")
+                    setStartTime("")
+                    setEndTime("")
+                    setDates({startDate:"",endDate:"",hours:0,endtime:"",project:"",starttime:""})
+                }else if(Project===""){
+                    const toastElement = document.getElementById("toastOverProject");
+                    const toast = new bootstrap.Toast(toastElement);     
+                    toast.show();   
+                }else{
+                    const toastElement = document.getElementById("toastOverTime");
+                    const toast = new bootstrap.Toast(toastElement);     
+                    toast.show();
+                }
             }
-            console.log("DateExist",BookingDateExist);
-            console.log("Finding remaining hours",BookingDateHours);
+            
+        }else{
+            if(hours<=8&&hours>0 && Project!=""){
+                const FormData:TimeSheetFormData={
+                    Project:Project,
+                    StartDate:dates.startDate,
+                    EndDate:dates.endDate,
+                    StartTime:StartTime,
+                    EndTime:EndTime,
+                    WorkingHours:hours
+                }
+                setTimeSheetData.mutate(FormData)
+             
+                
+                setProject("")
+                setStartTime("")
+                setEndTime("")
+                setDates({startDate:"",endDate:"",hours:0,endtime:"",project:"",starttime:""})
+            }else if(Project===""){
+                const toastElement = document.getElementById("toastOverProject");
+                const toast = new bootstrap.Toast(toastElement);     
+                toast.show();   
+            }else{
+                const toastElement = document.getElementById("toastOverTime");
+                const toast = new bootstrap.Toast(toastElement);     
+                toast.show();
+            }
         }
         
 
-        // if(hours<=8&&hours>0 && Project!=""){
-        //     const FormData:TimeSheetFormData={
-        //         Project:Project,
-        //         StartDate:dates.startDate,
-        //         EndDate:dates.endDate,
-        //         StartTime:StartTime,
-        //         EndTime:EndTime,
-        //         WorkingHours:hours
-        //     }
-        //     setTimeSheetData.mutate(FormData)
-         
-            
-        //     setProject("")
-        //     setStartTime("")
-        //     setEndTime("")
-        //     setDates({startDate:"",endDate:"",hours:0,endtime:"",project:"",starttime:""})
-        // }else if(Project===""){
-        //     const toastElement = document.getElementById("toastOverProject");
-        //     const toast = new bootstrap.Toast(toastElement);     
-        //     toast.show();   
-        // }else{
-        //     const toastElement = document.getElementById("toastOverTime");
-        //     const toast = new bootstrap.Toast(toastElement);     
-        //     toast.show();
-        // }
+        
          
     }
 
